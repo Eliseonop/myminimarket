@@ -1,0 +1,55 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+model Producto {
+  id          Int      @id @unique @default(autoincrement())
+  nombre      String 
+  precio      Float
+  imagen      String
+  descripcion String
+  // estado      Boolean  @default(true)
+  createdAt   DateTime @default(now()) @map(name: "created_at")
+  updatedAt   DateTime @updatedAt @map(name: "updated_at")
+  @@map(name: "productos")
+}
+
+model User {
+  id       Int      @id @unique @default(autoincrement())
+  name     String
+  email    String   @unique
+  password String
+  typeUser TypeUser @map(name: "tipo_usuario")
+
+  @@map(name: "usuarios")
+}
+
+model Permission {
+  id       Int           @id @unique @default(autoincrement())
+  typeUser TypeUser      @map(name: "tipo_usuario")
+  action   PermisoAccion
+  table    String
+
+  @@map(name: "permisos")
+}
+
+enum TypeUser {
+  ADMIN
+  CLIENT
+  SUPERADMIN
+}
+
+enum PermisoAccion {
+  CREATE
+  DELETE
+  READ
+  UPDATE
+}
+
+
