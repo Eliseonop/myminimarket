@@ -1,12 +1,32 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useContext } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { DataContext } from '../store/global.state'
 
 export function Navbar () {
   const router = useRouter()
   const [state, dispatch] = useContext(DataContext)
   const { auth } = state
+  const [show, setShow] = useState(false)
+
+  // cerrar el menu al darle click afuera
+  const ref = useRef()
+
+  useEffect(() => {
+    const checkIfClickedOutside = e => {
+      // si el usuario hace click afuera del menu
+      if (show && ref.current && !ref.current.contains(e.target)) {
+        setShow(false)
+      }
+    }
+
+    document.addEventListener('mousedown', checkIfClickedOutside)
+
+    return () => {
+      // cleanup
+      document.removeEventListener('mousedown', checkIfClickedOutside)
+    }
+  }, [show])
 
   return (
     // navbar ecommer with tailwidns
@@ -90,14 +110,46 @@ export function Navbar () {
                   Carrito
                 </Link>
                 {auth?.user ? (
-                  <div className='hidden sm:block md:px-7 '>
+                  <div className='hidden sm:block md:px-7 relative'
+                  ref={ref}
+                  >
                     <div className='flex space-x-4'>
-                      <Link
-                        href='/perfil'
+                      <button
+                        
+                        type='button'
+                        onClick={() => setShow(true)}
                         className='text-black hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'
                       >
                         {auth.user.name.toUpperCase()}
-                      </Link>
+                      </button>
+
+                      {show && (
+                        <div className='absolute right-14 z-10 w-48 top-10 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
+                          <div className='py-1'>
+                            <Link
+                              href='/perfil'
+                              className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                            >
+                              Perfil
+                            </Link>
+                            <Link
+                              href='/'
+                              className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                            >
+                              Configuración
+                            </Link>
+                            {auth.user.typeUser === 'ADMIN' && (
+                              <Link
+                                href='/admin/producto'
+                                className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                              >
+                                Admin Productos
+                              </Link>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
                       <button
                         className='text-black hover:bg-red-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'
                         onClick={() => {

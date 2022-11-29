@@ -63,9 +63,14 @@ export default function carrito () {
               </div>
               <div class='relative w-full px-4 max-w-full flex-grow flex-1 text-right'>
                 <button
-                  class='bg-sky-500  text-white active:bg-indigo-600 text-lg font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+                  class={
+                    carrito.length === 0
+                      ? 'bg-gray-400   text-white active:bg-indigo-600 text-lg font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+                      : 'bg-blue-500  text-white active:bg-indigo-600 text-lg font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+                  }
                   type='button'
                   onClick={handleCheckout}
+                  disabled={carrito.length === 0}
                 >
                   Comprar
                 </button>

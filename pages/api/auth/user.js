@@ -5,7 +5,7 @@ export default async function handler (req, res) {
   switch (req.method) {
     case 'POST':
       try {
-        const { name, email, password } = req.body
+        const { name, email, password, typeUser } = req.body
         const user = await prisma.user.findUnique({
           where: {
             email: email
@@ -21,7 +21,7 @@ export default async function handler (req, res) {
             data: {
               name,
               email,
-              typeUser: 'CLIENT',
+              typeUser: typeUser || 'CLIENT',
               password: hash
             }
           })

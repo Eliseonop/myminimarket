@@ -8,7 +8,7 @@ export default function checkout () {
 
   const [values, setValues] = useState({
     nombre: '',
-    email: '',
+    email: auth.user ? auth.user.email : '',
     direccion: '',
     ciudad: '',
     tarjeta: '',
