@@ -1,6 +1,8 @@
+import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
-import { getProducts } from '../services/producto'
+import { getProducts } from '../services/producto.service'
 import { DataContext } from '../store/global.state'
+import Link from 'next/link'
 
 export function HomeLanding () {
   const [state, dispatch] = useContext(DataContext)
@@ -8,6 +10,7 @@ export function HomeLanding () {
 
   const { carrito } = state
 
+  const router = useRouter()
   useEffect(() => {
     try {
       obtainProducts()
@@ -56,16 +59,18 @@ export function HomeLanding () {
               key={product.id}
               className='bg-white shadow-md rounded-lg max-w-sm dark:bg-gray-800 dark:border-gray-700'
             >
-              <img
-                className='rounded-t-lg p-8 h-52 w-52 md:w-64 mx-auto'
-                src={product.imagen}
-                alt='product image'
-              ></img>
+              <Link href={`/producto/${product.id}`}>
+                <img
+                  className='rounded-t-lg p-8 h-52 w-52 md:w-64 mx-auto cursor-pointer '
+                  src={product.image}
+                  alt='product image'
+                ></img>
+              </Link>
 
               <div className='px-5 pb-5'>
                 <a href='#'>
                   <h3 className='text-gray-900 font-semibold text-xl tracking-tight dark:text-white'>
-                    {product.nombre}
+                    {product.name}
                   </h3>
                 </a>
                 <div className='flex items-center mt-2.5 mb-5'>
@@ -115,12 +120,12 @@ export function HomeLanding () {
                 </div>
                 <div className='flex justify-between items-center'>
                   <h5 className='text-xs pb-2 font-semibold text-gray-700 dark:text-gray-200'>
-                    {product.descripcion}
+                    {product.description}
                   </h5>
                 </div>
                 <div className='flex items-center justify-between'>
                   <span className='text-2xl mx-4 font-bold text-gray-900 dark:text-white'>
-                    s/ {product.precio}
+                    s/ {product.price}
                   </span>
                   <a
                     href='#'

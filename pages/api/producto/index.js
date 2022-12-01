@@ -5,7 +5,7 @@ export default async function handler (req, res) {
   switch (req.method) {
     case 'GET':
       try {
-        const productos = await prisma.producto.findMany()
+        const productos = await prisma.product.findMany()
         res.status(200).json(productos)
       } catch (error) {
         res.status(500).json({ error: error })
@@ -14,16 +14,18 @@ export default async function handler (req, res) {
       break
     case 'POST':
       try {
-        const { nombre, precio, descripcion, imagen } = req.body
-        const producto = await prisma.producto.create({
+        const { name, price, description, image, stock } = req.body
+        const product = await prisma.product.create({
           data: {
-            nombre,
-            precio,
-            descripcion,
-            imagen
+            name,
+            price,
+            description,
+            image,
+            stock
           }
         })
-        res.status(200).json(producto)
+        console.log(product)
+        res.status(200).json(product)
       } catch (error) {
         res.status(500).json({ error: error })
       }

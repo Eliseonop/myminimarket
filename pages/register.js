@@ -1,33 +1,39 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
 import { authRegister } from '../services/user.service'
-import {DataContext} from '../store/global.state'
+import { DataContext } from '../store/global.state'
 
 export default function Register () {
   const initialState = {
     name: '',
     email: '',
+    document: '',
     password: '',
     cfpassword: ''
   }
-  const [state,dispatch] = useContext(DataContext)
+  const [state, dispatch] = useContext(DataContext)
   const [values, setValues] = useState(initialState)
+
+  const router = useRouter()
 
   const handleInputChange = e => {
     const { name, value } = e.target
     setValues({ ...values, [name]: value })
   }
 
-  const handleSubmit =async e => {
+  const handleSubmit = async e => {
     e.preventDefault()
-    dispatch({type: 'NOTIFY', payload: {loading: true}})
+    dispatch({ type: 'NOTIFY', payload: { loading: true } })
     try {
       const dataUser = await authRegister(values)
-      dispatch({type: 'NOTIFY', payload: {success: dataUser.data}})
+      dispatch({ type: 'NOTIFY', payload: { loading: false } })
+
+      router.push('/login')
     } catch (error) {
       console.log(error)
-      dispatch({type: 'NOTIFY', payload: {error: error?.response?.data}})
+      dispatch({ type: 'NOTIFY', payload: { error: error?.response?.data } })
     }
   }
   const buttonDisabled =
@@ -86,6 +92,24 @@ export default function Register () {
                 id='email'
                 type='email'
                 placeholder='email@example.com'
+              />
+            </div>
+            <div className='mb-4'>
+              <label
+                className='block text-gray-700 text-sm font-bold mb-2'
+                htmlFor='username'
+              >
+                Documento
+              </label>
+              <input
+                required
+                name='document'
+                maxLength={8}
+                onChange={handleInputChange}
+                value={values.document}
+                className='shadow appearance-none border focus:border-blue-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                type='text'
+                placeholder='71275435'
               />
             </div>
             <div className='mb-6'>

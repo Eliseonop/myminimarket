@@ -4,39 +4,53 @@ generator client {
 }
 
 datasource db {
-  provider             = "mysql"
-  url                  = env("DATABASE_URL")
-  referentialIntegrity = "prisma"
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
-model Producto {
-  id          Int      @id @unique @default(autoincrement())
-  nombre      String 
-  precio      Float
-  imagen      String
-  descripcion String
-  // estado      Boolean  @default(true)
-  createdAt   DateTime @default(now()) @map(name: "created_at")
-  updatedAt   DateTime @updatedAt @map(name: "updated_at")
-  @@map(name: "productos")
+
+//minimarket model : product , user , order 
+
+model Product {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+  price       Float
+  stock       Int
+  image       String
+
+  @@map("products")
 }
 
 model User {
-  id       Int      @id @unique @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   name     String
   email    String   @unique
+  document String   @unique
+  typeUser TypeUser @default(CLIENT)
   password String
-  typeUser TypeUser @map(name: "tipo_usuario")
+  orders   Order[]
 
-  @@map(name: "usuarios")
+  @@map("users")
 }
 
-model Permission {
-  id       Int           @id @unique @default(autoincrement())
-  typeUser TypeUser      @map(name: "tipo_usuario")
-  action   PermisoAccion
-  table    String
+model Order {
+  id        Int     @id @default(autoincrement())
+  quantity  Int
+  total     Float
+  direction String
+  status    Status  @default(PENDING)
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int
 
-  @@map(name: "permisos")
+  @@index([userId], name: "userId")
+  @@map("orders")
+}
+
+enum Status {
+  PENDING
+  CANCELLED
+  COMPLETED
 }
 
 enum TypeUser {
@@ -44,12 +58,3 @@ enum TypeUser {
   CLIENT
   SUPERADMIN
 }
-
-enum PermisoAccion {
-  CREATE
-  DELETE
-  READ
-  UPDATE
-}
-
-

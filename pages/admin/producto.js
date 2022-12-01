@@ -5,7 +5,7 @@ import {
   createProduct,
   getProductById,
   getProducts
-} from '../../services/producto'
+} from '../../services/producto.service'
 
 function producto () {
   const [productos, setProductos] = useState([])
@@ -73,9 +73,9 @@ function producto () {
         />
       )}
       <div className='flex flex-col md:m-20 '>
-        <h1 className='text-center text-3xl font-bold text-gray-700 mb-4'>
+        <h4 className=' text-xl font-bold text-gray-700 mb-4'>
           Lista de productos
-        </h1>
+        </h4>
         <div>
           <button
             className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
@@ -88,24 +88,26 @@ function producto () {
           <div className='w-full '>
             <div className='bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'>
               {/* header de la tabla con divs */}
-              <div className='grid grid-cols-5 shadow-sm py-4 px-5'>
+              <div className='grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 shadow-sm py-4 px-5'>
                 <div className='font-bold'>Nombre</div>
                 <div className='font-bold'>Precio</div>
-                <div className='font-bold'>Descripcion</div>
-                <div className='font-bold'>Imagen</div>
+                <div className='font-bold hidden sm:block '>Descripcion</div>
+                <div className='font-bold hidden md:block'>Imagen</div>
                 <div className='font-bold'>Acciones</div>
               </div>
               {/* cuerpo de la tabla con divs */}
-              <div className=''>
+              <div className='space-y-3 overflow-y-auto max-h-[60vh]'>
                 {productos.map(producto => (
-                  <div className='grid grid-cols-5 h10 p-4' key={producto.id}>
-                    <div>{producto.nombre}</div>
-                    <div>{producto.precio}</div>
-                    <div>{producto.descripcion}</div>
-                    <div>
+                  <div className='grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 h10 p-4' key={producto.id}>
+                    <div>{producto.name}</div>
+                    <div>{producto.price}</div>
+                    <div className='hidden sm:block'>
+                      {producto.description}
+                    </div>
+                    <div className='hidden md:block'>
                       <img
                         className='w-10 h-10 rounded-full'
-                        src={producto.imagen}
+                        src={producto.image}
                         alt=''
                       />
                     </div>

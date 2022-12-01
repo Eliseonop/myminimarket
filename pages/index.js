@@ -4,8 +4,6 @@ import { HomeLanding } from '../components/HomeLanding'
 import { Layout } from '../components/Layout'
 import styles from '../styles/Home.module.css'
 
-export default function Home() {
-  return (
-      <HomeLanding></HomeLanding>
-  )
+export default function Home () {
+  return <HomeLanding></HomeLanding>
 }

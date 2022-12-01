@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@prisma/client": "^4.6.1",
+    "@prisma/client": "^4.7.0",
     "axios": "^1.2.0",
     "bcrypt": "^5.1.0",
     "mysql2": "^2.3.3",

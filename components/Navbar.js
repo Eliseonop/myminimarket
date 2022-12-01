@@ -6,8 +6,9 @@ import { DataContext } from '../store/global.state'
 export function Navbar () {
   const router = useRouter()
   const [state, dispatch] = useContext(DataContext)
-  const { auth } = state
+  const { auth, carrito } = state
   const [show, setShow] = useState(false)
+  const [showMenu, setShowMenu] = useState(false)
 
   // cerrar el menu al darle click afuera
   const ref = useRef()
@@ -28,6 +29,8 @@ export function Navbar () {
     }
   }, [show])
 
+  console.log(router.pathname)
+
   return (
     // navbar ecommer with tailwidns
     <nav className='bg-white shadow'>
@@ -36,6 +39,8 @@ export function Navbar () {
           <div className='absolute inset-y-0 left-0 flex items-center sm:hidden'>
             {/* Mobile menu button*/}
             <button
+              onClick={() => setShowMenu(!showMenu)}
+
               type='button'
               className='inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white'
               aria-controls='mobile-menu'
@@ -80,20 +85,29 @@ export function Navbar () {
           </div>
           <div className='flex-1 flex items-center justify-around space-x-5 '>
             <div className='flex-shrink-0 flex items-center'>
-              <span className='font-bold text-2xl'>Mini Market</span>
+              <span className='font-bold text-2xl'>
+                <Link href='/'>My minimarket</Link>
+              </span>
             </div>
             <div className='hidden sm:block sm:ml-6 mx-4 '>
               <div className='flex '>
                 {/* Current: "bg-gray-900 text-white", Default: "text-black hover:bg-gray-700 hover:text-white" */}
                 <Link
                   href='/'
-                  className=' text-black hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'
+                  className={
+                    router.pathname === '/'
+                      ? ' text-white bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-bold'
+                      : 'text-black hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-bold'
+                  }
                 >
                   Productos
                 </Link>
-                <Link
+                {/* <Link
                   href='/promociones'
-                  className='text-black hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-bold'
+                  className={
+                    router.pathname === '/promociones'
+                    ? ' text-white bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-bold' : 'text-black hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-bold'
+                  }
                 >
                   Promociones
                 </Link>
@@ -102,23 +116,36 @@ export function Navbar () {
                   className='text-black hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-bold'
                 >
                   Contacto
-                </Link>
+                </Link> */}
                 <Link
                   href='/carrito'
-                  className='text-black hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-bold'
+                  className={
+                    router.pathname === '/carrito'
+                      ? ' text-white bg-gray-700 hover:text-white mx-4 px-3 py-2 rounded-md text-sm font-bold'
+                      : 'text-black hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-bold mx-4'
+                  }
                 >
+                  {' '}
+                  {carrito.length > 0 && (
+                    <span className='bg-red-500 text-white rounded-full px-2 py-1 text-xs font-bold'>
+                      {carrito
+                        .map(item => item.cantidad)
+                        .reduce((a, b) => a + b)}
+                    </span>
+                  )}
                   Carrito
                 </Link>
                 {auth?.user ? (
-                  <div className='hidden sm:block md:px-7 relative'
-                  ref={ref}
-                  >
+                  <div className='hidden sm:block md:px-7 relative' ref={ref}>
                     <div className='flex space-x-4'>
                       <button
-                        
                         type='button'
-                        onClick={() => setShow(true)}
-                        className='text-black hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'
+                        onClick={() => setShow(!show)}
+                        className={
+                          show
+                            ? 'text-white bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-bold'
+                            : 'text-black hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-bold'
+                        }
                       >
                         {auth.user.name.toUpperCase()}
                       </button>
@@ -139,12 +166,27 @@ export function Navbar () {
                               Configuración
                             </Link>
                             {auth.user.typeUser === 'ADMIN' && (
-                              <Link
-                                href='/admin/producto'
-                                className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
-                              >
-                                Admin Productos
-                              </Link>
+                              <>
+                                <Link
+                                  href='/admin/producto'
+                                  className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                                >
+                                  Admin Productos
+                                </Link>
+                                <Link
+                                  href='/admin/pedidos'
+                                  className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                                >
+                                  Admin Pedidos
+                                </Link>
+
+                                <Link
+                                  className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                                  href='/admin/clientes'
+                                >
+                                  Clientes
+                                </Link>
+                              </>
                             )}
                           </div>
                         </div>

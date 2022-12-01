@@ -5,12 +5,12 @@ export default async function handler (req, res) {
     case 'GET':
       try {
         const { id } = req.query
-        const product = await prisma.product.findUnique({
+        const order = await prisma.order.findUnique({
           where: {
             id: Number(id)
           }
         })
-        res.status(200).json(product)
+        res.status(200).json(order)
       } catch (error) {
         res.status(500).json({ error: error })
       }
@@ -19,19 +19,17 @@ export default async function handler (req, res) {
     case 'PUT':
       try {
         const { id } = req.query
-        const { nombre, precio, descripcion, imagen } = req.body
-        const product = await prisma.product.update({
+        const { status } = req.body
+        const order = await prisma.order.update({
           where: {
             id: Number(id)
           },
           data: {
-            nombre,
-            precio,
-            descripcion,
-            imagen
+            status
           }
         })
-        res.status(200).json(product)
+
+        res.status(200).json(order)
       } catch (error) {
         res.status(500).json({ error: error })
       }
@@ -40,12 +38,12 @@ export default async function handler (req, res) {
     case 'DELETE':
       try {
         const { id } = req.query
-        const product = await prisma.product.delete({
+        const order = await prisma.order.delete({
           where: {
             id: Number(id)
           }
         })
-        res.status(200).json(product)
+        res.status(200).json(order)
       } catch (error) {
         res.status(500).json({ error: error })
       }

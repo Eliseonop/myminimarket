@@ -5,14 +5,14 @@ export default async function handler (req, res) {
   switch (req.method) {
     case 'POST':
       try {
-        const { name, email, password, typeUser } = req.body
+        const { name, email, password, typeUser, document } = req.body
         const user = await prisma.user.findUnique({
           where: {
             email: email
           }
         })
         if (user) {
-          return res.status(400).json({ error: 'El usuario ya existe' })
+          return res.status(400).json({ error: 'El user ya existe' })
         } else {
           const salt = await bycrypt.genSalt(10)
           const hash = await bycrypt.hash(password, salt)
@@ -21,11 +21,12 @@ export default async function handler (req, res) {
             data: {
               name,
               email,
-              typeUser: typeUser || 'CLIENT',
-              password: hash
+              typeUser,
+              password: hash,
+              document
             }
           })
-          res.status(200).json({ message: 'Usuario creado correctamente' })
+          res.status(200).json({ message: 'user creado correctamente' })
         }
       } catch (error) {
         res.status(400).json({ error: error.message })
@@ -58,7 +59,7 @@ export default async function handler (req, res) {
           })
           return res.status(200).json(deleteUser)
         } else {
-          return res.status(400).json({ error: 'El usuario no existe' })
+          return res.status(400).json({ error: 'El user no existe' })
         }
       } catch (error) {
         return res.status(500).json({ error: error })

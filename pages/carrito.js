@@ -45,6 +45,10 @@ export default function carrito () {
     }
   }
 
+  function roundUp (num, precision) {
+    precision = Math.pow(10, precision)
+    return Math.ceil(num * precision) / precision
+  }
   const handleCheckout = () => {
     router.push('/checkout')
   }
@@ -113,13 +117,13 @@ export default function carrito () {
                   carrito.map(product => (
                     <tr key={product.id}>
                       <th className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 text-left text-blueGray-700 '>
-                        {product.nombre}
+                        {product.name}
                       </th>
                       <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 '>
                         <img
                           className='h-12 w-12 rounded-full'
-                          src={product.imagen}
-                          alt={product.nombre}
+                          src={product.image}
+                          alt={product.name}
                         />
                       </td>
                       <td className='border-t-0 px-6 align-center border-l-0 border-r-0 text-sm whitespace-nowrap p-4'>
@@ -144,10 +148,10 @@ export default function carrito () {
                       </td>
                       <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4'>
                         {/* <i className='fas fa-arrow-up text-emerald-500 mr-4'></i> */}
-                        s/ {product.precio}
+                        s/ {product.price}
                       </td>
                       <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4'>
-                        s/ {product.precio * product.cantidad}
+                        s/ {roundUp(product.price * product.cantidad, 2)}
                       </td>
                     </tr>
                   ))

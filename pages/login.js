@@ -1,12 +1,13 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { authLogin } from '../services/user.service'
 import { DataContext } from '../store/global.state'
+import Loading from '../components/Loading'
 
 export default function Register () {
-
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
 
   const initialState = {
@@ -21,8 +22,16 @@ export default function Register () {
     const { name, value } = e.target
     setValues({ ...values, [name]: value })
   }
+  useEffect(() => {
+    const { auth } = state
+
+    if (auth.user) {
+      router.push('/')
+    }
+  }, [state])
 
   const handleSubmit = async e => {
+    setLoading(true)
     e.preventDefault()
     dispatch({ type: 'NOTIFY', payload: { loading: true } })
 
@@ -31,6 +40,7 @@ export default function Register () {
       dispatch({ type: 'AUTH', payload: { user: dataUser.data } })
       localStorage.setItem('user', JSON.stringify(dataUser.data))
       dispatch({ type: 'NOTIFY', payload: { success: 'Login correcto' } })
+      setLoading(false)
       router.push('/')
     } catch (error) {
       dispatch({ type: 'NOTIFY', payload: { error: error?.response?.data } })
@@ -40,6 +50,9 @@ export default function Register () {
   const buttonDisabled =
     values.email.length === 0 || values.password.length === 0
 
+  if (loading) {
+    return <Loading />
+  }
   return (
     <div>
       <Head>

@@ -1,4 +1,4 @@
-import { deleteProduct } from '../services/producto'
+import { deleteProduct } from '../services/producto.service'
 
 function Delete ({ producto, setEliminar, eliminar }) {
   const handleDelete = async () => {
@@ -23,7 +23,7 @@ function Delete ({ producto, setEliminar, eliminar }) {
     <div
       className={
         eliminar.open
-          ? 'absolute flex w-[100vw] h-[100vh] bg-blur-md z-10 backdrop-opacity-10 backdrop-invert bg-white/40 justify-center  p-6'
+          ? 'fixed top-0 flex w-[100vw] h-[100vh] bg-blur-md z-10 backdrop-opacity-10 backdrop-invert bg-white/40 justify-center  p-6'
           : 'hidden'
       }
     >
@@ -33,7 +33,7 @@ function Delete ({ producto, setEliminar, eliminar }) {
           <div className='text-center p-5 flex-auto justify-center'>
             {/* imagen */}
             <img
-              src={producto ? producto.imagen : ''}
+              src={producto ? producto.image : ''}
               alt='imagen'
               className='w-20 h-20 mx-auto '
             />
@@ -43,7 +43,7 @@ function Delete ({ producto, setEliminar, eliminar }) {
             <p className='text-xl text-gray-500 px-8'>
               Esta accion no se puede deshacer al darle click en eliminar se
               borrara el producto:{' '}
-              <span className='font-bold'>{producto.nombre}</span> de forma
+              <span className='font-bold'>{producto.name}</span> de forma
               permanente
             </p>
           </div>
