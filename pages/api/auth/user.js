@@ -65,6 +65,49 @@ export default async function handler (req, res) {
         return res.status(500).json({ error: error })
       }
       break
+    case 'PUT':
+      try {
+        const { id, name, password } = req.body
+
+        const user = await prisma.user.findUnique({
+          where: {
+            id: id
+          }
+        })
+        if (user) {
+          const updateUser = await prisma.user.update({
+            where: {
+              id: id
+            },
+            data: {
+              name
+            }
+          })
+          if (password) {
+            const salt = await bycrypt.genSalt(10)
+            const hash = await bycrypt.hash(password, salt)
+            const updateUser = await prisma.user.update({
+              where: {
+                id: id
+              },
+              data: {
+                password: hash
+              }
+            })
+          }
+          const userUpdate = await prisma.user.findUnique({
+            where: {
+              id: id
+            }
+          })
+          return res.status(200).json(userUpdate)
+        } else {
+          return res.status(400).json({ error: 'El user no existe' })
+        }
+      } catch (error) {
+        return res.status(500).json({ error: error })
+      }
+      break
 
     default:
       res.status(405).json({ error: 'Method not allowed.' })

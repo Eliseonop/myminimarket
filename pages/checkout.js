@@ -167,9 +167,9 @@ export default function checkout () {
         </div>
 
         <button
-          disabled={carrito.length === 0}
+          disabled={carrito.length < 0 || !state?.auth?.user}
           className={
-            carrito.length === 0 || state?.auth?.user === null
+            carrito.length < 0 || !state?.auth?.user
               ? 'bg-gray-300 text-gray-400 cursor-not-allowed mt-8 w-full py-4 rounded'
               : 'bg-blue-500 text-white mt-8 w-full py-4 rounded'
           }
@@ -179,7 +179,7 @@ export default function checkout () {
             <p className='text-base leading-4'>Ordenar Productos </p>
           </div>
         </button>
-        {/* {state?.auth?.user ?? (
+        {!state?.auth?.user && (
           <div className='mt-4'>
             <p className='text-base leading-4 text-center text-red-500'>
               Debes iniciar sesión para poder ordenar
@@ -190,7 +190,7 @@ export default function checkout () {
               </spa>
             </p>
           </div>
-        )} */}
+        )}
       </div>
     </section>
   )

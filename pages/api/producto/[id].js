@@ -19,16 +19,17 @@ export default async function handler (req, res) {
     case 'PUT':
       try {
         const { id } = req.query
-        const { nombre, precio, descripcion, imagen } = req.body
+        const { name, price, description, image, stock } = req.body
         const product = await prisma.product.update({
           where: {
             id: Number(id)
           },
           data: {
-            nombre,
-            precio,
-            descripcion,
-            imagen
+            name,
+            price,
+            description,
+            image,
+            stock
           }
         })
         res.status(200).json(product)

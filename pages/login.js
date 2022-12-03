@@ -122,6 +122,9 @@ export default function Register () {
                 No tienes cuenta?
               </Link>
             </div>
+            {state.notify?.error && (
+              <p className='text-red-500 text-xs italic mt-4'>Error vuelve a intentar</p>
+            )}
           </form>
           <p className='text-center text-gray-500 text-xs'>
             &copy;2022 titanicsoft. All rights reserved.

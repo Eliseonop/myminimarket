@@ -11,6 +11,11 @@ export const authLogin = async data => {
 }
 
 export const getUsers = async () => {
-  const {data} = await axiosConfig.get('/auth/user')
+  const { data } = await axiosConfig.get('/auth/user')
   return data
+}
+
+export const updateUser = async ( data) => {
+  const response = await axiosConfig.put(`/auth/user`, data)
+  return response
 }
